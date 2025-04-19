@@ -1,0 +1,5 @@
+pydantic-settings
+python-dotenv
+crawl4ai
+pydantic
+playwright
