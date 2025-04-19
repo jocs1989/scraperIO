@@ -20,51 +20,51 @@ class DockerConfig(BaseSettings):
     ports: Optional[Dict[str, str]] = None
 
 
-class BrowserConfig(BaseSettings):
-    BROWSER_TYPE: str =  BrowserType.CHROMIUM.value
+
+
+# Base Config class to load environment variables
+class BaseConfig(BaseSettings):
+    ENV_STATE: Optional[str] = None
+    
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+
+
+
+
+# GlobalConfig: Basic config that will be used in all environments
+class GlobalConfig(BaseConfig):
+    BROWSER_TYPE: str =  "chromium"
     BROWSER_HEADLESS: bool = True
     BROWSER_PROXY_CONFIG: Optional[Union[ProxyConfig, Dict, None]] = None
     BROWSER_VIEWPORT_WIDTH: int = 1080
     BROWSER_VIEWPORT_HEIGHT: int = 600
     BROWSER_VERBOSE: bool = True
     BROWSER_USE_PERSISTENT_CONTEXT: bool = False 
-    BROWSER_COOKIES: Optional[List[Dict]] = None
-    BROWSER_HEADERS: Optional[Dict[str, str]] = None
-    BROWSER_USER_AGENT: str = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/116.0.0.0 Safari/537.36"
-    BROWSER_TEXT_MODE: bool = False
-    BROWSER_LIGHT_MODE: bool = False    
-    BROWSER_EXTRA_ARGS: Optional[List[str]] = None
-
-
-# Base Config class to load environment variables
-class BaseConfig(BaseSettings):
-    ENV_STATE: Optional[str] = None
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
-
-# GlobalConfig: Basic config that will be used in all environments
-class GlobalConfig(BaseConfig):
-    DATABASE_URL: Optional[str] = None
-    DB_FORCE_ROLL_BACK: bool = False
+    BROWSER_COOKIES: Optional[Union[ Dict, None]] = None
+    BROWSER_HEADERS: Optional[Union[ Dict, None]] = None
+    BROWSER_USER_AGENT: Optional[Union[ str, None]] =  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/116.0.0.0 Safari/537.36"
+    BROWSER_TEXT_MODE: bool = True
+    BROWSER_LIGHT_MODE: bool = True    
+    BROWSER_EXTRA_ARGS: Optional[Union[ str, None]]= None
 
 
 # Different configurations based on environment
 class DevConfig(GlobalConfig):
-    HEADLESS: bool = False
-    VERBOSE: bool = True
-    model_config = SettingsConfigDict(env_prefix="DEV_")
+    BROWSER_HEADLESS: bool = False
+    BROWSER_VERBOSE: bool = True
+    model_config = SettingsConfigDict()
 
 
 class ProdConfig(GlobalConfig):
-    HEADLESS: bool =True
-    VERBOSE: bool = False
-    model_config = SettingsConfigDict(env_prefix="PROD_")
+    BROWSER_HEADLESS: bool = True
+    BROWSER_VERBOSE: bool = False
+    model_config = SettingsConfigDict()
 
 
 class TestConfig(GlobalConfig):
-    DATABASE_URL: str = "sqlite:///test.db"
-    DB_FORCE_ROLL_BACK: bool = True
-    model_config = SettingsConfigDict(env_prefix="TEST_")
+  
+    model_config = SettingsConfigDict()
 
 
 @lru_cache()
@@ -77,5 +77,3 @@ def get_config(env_state: str):
 # Load environment state and get the corresponding config
 config = get_config(BaseConfig().ENV_STATE)
 
-# Example: Print loaded config (BrowserConfig)
-print(config.dict())  # Imprimir la configuración cargada
