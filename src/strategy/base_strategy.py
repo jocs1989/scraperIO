@@ -28,7 +28,7 @@ schema = {
 extraction_strategy= JsonCssExtractionStrategy(schema)
 
 
-config  = CrawlerRunConfig(
+config   = CrawlerRunConfig(
 
     extraction_strategy=extraction_strategy
 )

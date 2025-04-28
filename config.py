@@ -43,7 +43,7 @@ class GlobalConfig(BaseConfig):
     BROWSER_USE_PERSISTENT_CONTEXT: bool = False 
     BROWSER_COOKIES: Optional[Union[ Dict, None]] = None
     BROWSER_HEADERS: Optional[Union[ Dict, None]] = None
-    BROWSER_USER_AGENT: Optional[Union[ str, None]] =  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/116.0.0.0 Safari/537.36"
+    BROWSER_USER_AGENT: Optional[Union[ str, None]] =  "random"
     BROWSER_TEXT_MODE: bool = True
     BROWSER_LIGHT_MODE: bool = True    
     BROWSER_EXTRA_ARGS: Optional[Union[ str, None]]= None
